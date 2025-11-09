@@ -1,0 +1,28 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>VULNERABLE Java Demo</title></head>
+<body>
+<h1>VULNERABLE Demo (Java)</h1>
+<form id="regForm">
+<input name="username" placeholder="Username"><input name="password" type="text" placeholder="Password"><button>Register</button>
+</form>
+<pre id="regOut"></pre>
+
+<form id="logForm">
+<input name="username" placeholder="Username"><input name="password" type="text" placeholder="Password"><button>Login</button>
+</form>
+<pre id="logOut"></pre>
+
+<script>
+async function postAction(url, form, out) {
+  out.textContent = 'Please wait...';
+  const fd = new FormData(form);
+  const res = await fetch(url, { method:'POST', body: fd });
+  out.textContent = await res.text();
+}
+
+document.getElementById('regForm').addEventListener('submit', e => { e.preventDefault(); postAction('api/register', e.target, document.getElementById('regOut')); });
+document.getElementById('logForm').addEventListener('submit', e => { e.preventDefault(); postAction('api/login', e.target, document.getElementById('logOut')); });
+</script>
+</body>
+</html>

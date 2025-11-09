@@ -1,0 +1,20 @@
+# bazy danych
+*.sqlite
+*.db
+users_*.sqlite
+users_*.db
+
+# build / target / jar
+/target/
+/**/target/
+*.jar
+
+# logi i pid
+*.log
+*.pid
+logs/
+
+# pliki tymczasowe edytorów
+*.swp
+*.swo
+.DS_Store

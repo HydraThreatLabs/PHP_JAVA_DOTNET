@@ -1,0 +1,3 @@
+BACKEND STUB for dotnet/vulnerable
+Implement /api/register and /api/login endpoints (vulnerable).
+Suggestion: use naive SQL concatenation to demo SQLi.
