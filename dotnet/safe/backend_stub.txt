@@ -1,3 +1,0 @@
-BACKEND STUB for dotnet/safe
-Implement /api/register and /api/login endpoints (safe).
-Suggestion: use prepared statements and hashed passwords.
