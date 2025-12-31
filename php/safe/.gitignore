@@ -1,0 +1,4 @@
+uploads/
+*.sqlite
+*.sqlite.bak
+private_uploads/

@@ -1,33 +1,34 @@
 <?php
-/**
- * init_db.php
- * Tworzy SQLite DB oraz tabele users i failed_logins.
- * Uruchom raz: php init_db.php
- */
+// init_db.php — pełne utworzenie bazy danych
+$dbFile = __DIR__ . '/database.sqlite';
+if(file_exists($dbFile)) unlink($dbFile);
 
-try {
-    $db = new PDO('sqlite:users_safe.sqlite');
-    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+$pdo = new PDO('sqlite:' . $dbFile);
+$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+$pdo->exec("PRAGMA foreign_keys = ON;");
 
-    // tabela użytkowników
-    $db->exec("CREATE TABLE IF NOT EXISTS users (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        username TEXT UNIQUE NOT NULL,
-        password TEXT NOT NULL,
-        created_at INTEGER NOT NULL
-    )");
+// Tabela users
+$pdo->exec("
+CREATE TABLE users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    email TEXT UNIQUE NOT NULL,
+    password TEXT NOT NULL,
+    display_name TEXT,
+    avatar TEXT DEFAULT NULL,
+    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+");
 
-    // tabela do rate-limiting nieudanych logowań
-    $db->exec("CREATE TABLE IF NOT EXISTS failed_logins (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        username TEXT,
-        ip TEXT,
-        ts INTEGER
-    )");
+// Tabela comments
+$pdo->exec("
+CREATE TABLE comments (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER NOT NULL,
+    comment TEXT NOT NULL,
+    ts INTEGER NOT NULL,
+    FOREIGN KEY(user_id) REFERENCES users(id)
+);
+");
 
-    echo "DB ready: users_safe.sqlite\n";
-
-} catch (Exception $e) {
-    echo "DB init error: " . $e->getMessage() . "\n";
-    exit(1);
-}
+echo "DATABASE INITIALIZED SUCCESSFULLY\n";
+?>
